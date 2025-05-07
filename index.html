@@ -2,55 +2,107 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BCx Algorithm Decision Tool</title>
+  <title>BCx Algorithm Tool</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; }
     .question { margin-bottom: 20px; }
     .hidden { display: none; }
-    button { margin-top: 10px; }
+    button { margin: 5px 0; }
+    .section-title { font-size: 1.4em; margin-top: 40px; }
   </style>
 </head>
 <body>
 
-<h2>BCx Algorithm Interactive Guide</h2>
+<h2>BCx Algorithm Interactive Guide (v5.5)</h2>
 
-<div id="q1" class="question">
+<!-- SECTION 1: Initial BCx -->
+<div id="start" class="question">
+  <p class="section-title">Initial Blood Cultures (BCx)</p>
   <p><strong>New clinical event:</strong><br>Do you suspect any of the following?<br>
-  - Severe sepsis or septic shock?<br>
-  - Infective endocarditis?<br>
-  - Endovascular infection?</p>
-  <button onclick="show('q2')">Yes</button>
+    - Severe sepsis or septic shock?<br>
+    - Infective endocarditis?<br>
+    - Endovascular infection?</p>
   <button onclick="show('q1a')">No</button>
+  <button onclick="show('q2')">Yes</button>
 </div>
 
 <div id="q1a" class="question hidden">
   <p>Select the pretest probability of bacteremia:</p>
   <button onclick="show('q2')">High (&gt;50%)</button>
   <button onclick="show('q2')">Intermediate (≥10% and &lt;50%)</button>
-  <button onclick="show('q2a')">Low (&lt;10%)</button>
-</div>
-
-<div id="q2a" class="question hidden">
-  <p><strong>BCx NOT recommended</strong></p>
+  <button onclick="show('result2')">Low (&lt;10%)</button>
 </div>
 
 <div id="q2" class="question hidden">
   <p>Does any of the following apply?<br>
-  - Risk of endovascular infection (e.g., ICD, graft, valve, etc)?<br>
-  - Source not readily available for culture before antibiotics?<br>
-  - BCx results likely to impact management?</p>
+  - Risk of endovascular infection (e.g., ICD, graft, valve)?<br>
+  - Source not available for culture before antibiotics?<br>
+  - Will BCx results likely impact management?</p>
   <button onclick="show('result1')">Yes</button>
   <button onclick="show('result2')">No</button>
 </div>
 
 <div id="result1" class="question hidden">
-  <p><strong>Initial BCx RECOMMENDED</strong><br>(2 peripheral sets; consider &gt;2 for endocarditis)</p>
+  <p><strong>Initial BCx RECOMMENDED</strong><br>Obtain 2 peripheral sets (consider >2 if endocarditis suspected).</p>
+  <button onclick="show('fubcx_start')">Go to Follow-Up BCx →</button>
 </div>
 
 <div id="result2" class="question hidden">
   <p><strong>BCx NOT recommended</strong></p>
+  <button onclick="show('fubcx_start')">Go to Follow-Up BCx →</button>
 </div>
 
+<!-- SECTION 2: Follow-Up BCx -->
+<div id="fubcx_start" class="question hidden">
+  <p class="section-title">Follow-Up Blood Cultures (FUBCx)</p>
+  <p>Is the initial BCx result <strong>positive</strong>?</p>
+  <button onclick="show('fubcx_q1')">Yes</button>
+  <button onclick="show('fubcx_no_needed')">No</button>
+</div>
+
+<div id="fubcx_no_needed" class="question hidden">
+  <p><strong>FUBCx NOT recommended</strong><br>Only needed if initial BCx positive.</p>
+</div>
+
+<div id="fubcx_q1" class="question hidden">
+  <p>Is the organism a likely contaminant (e.g., coagulase-negative staph, Corynebacterium, etc.)?</p>
+  <button onclick="show('fubcx_q2')">No (likely true infection)</button>
+  <button onclick="show('fubcx_q1a')">Yes</button>
+</div>
+
+<div id="fubcx_q1a" class="question hidden">
+  <p>More than 1 bottle/set positive?</p>
+  <button onclick="show('fubcx_q2')">Yes</button>
+  <button onclick="show('fubcx_not_recommended')">No</button>
+</div>
+
+<div id="fubcx_q2" class="question hidden">
+  <p>Was a source control intervention performed <strong>after</strong> initial BCx?</p>
+  <button onclick="show('fubcx_q3')">Yes</button>
+  <button onclick="show('fubcx_q3')">No</button>
+</div>
+
+<div id="fubcx_q3" class="question hidden">
+  <p>Is patient receiving effective antibiotics?</p>
+  <button onclick="show('fubcx_q4')">Yes</button>
+  <button onclick="show('fubcx_not_recommended')">No</button>
+</div>
+
+<div id="fubcx_q4" class="question hidden">
+  <p>Is endovascular infection suspected OR is a positive culture expected to impact management?</p>
+  <button onclick="show('fubcx_recommended')">Yes</button>
+  <button onclick="show('fubcx_not_recommended')">No</button>
+</div>
+
+<div id="fubcx_recommended" class="question hidden">
+  <p><strong>FUBCx RECOMMENDED</strong><br>Obtain 1 peripheral set ≥48h after starting effective antibiotics.</p>
+</div>
+
+<div id="fubcx_not_recommended" class="question hidden">
+  <p><strong>FUBCx NOT recommended</strong></p>
+</div>
+
+<!-- Script for logic -->
 <script>
   function show(id) {
     const questions = document.querySelectorAll('.question');
