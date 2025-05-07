@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCx Algorithm Decision Tool</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+    .question { margin-bottom: 20px; }
+    .hidden { display: none; }
+    button { margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<h2>BCx Algorithm Interactive Guide</h2>
+
+<div id="q1" class="question">
+  <p><strong>New clinical event:</strong><br>Do you suspect any of the following?<br>
+  - Severe sepsis or septic shock?<br>
+  - Infective endocarditis?<br>
+  - Endovascular infection?</p>
+  <button onclick="show('q2')">Yes</button>
+  <button onclick="show('q1a')">No</button>
+</div>
+
+<div id="q1a" class="question hidden">
+  <p>Select the pretest probability of bacteremia:</p>
+  <button onclick="show('q2')">High (&gt;50%)</button>
+  <button onclick="show('q2')">Intermediate (≥10% and &lt;50%)</button>
+  <button onclick="show('q2a')">Low (&lt;10%)</button>
+</div>
+
+<div id="q2a" class="question hidden">
+  <p><strong>BCx NOT recommended</strong></p>
+</div>
+
+<div id="q2" class="question hidden">
+  <p>Does any of the following apply?<br>
+  - Risk of endovascular infection (e.g., ICD, graft, valve, etc)?<br>
+  - Source not readily available for culture before antibiotics?<br>
+  - BCx results likely to impact management?</p>
+  <button onclick="show('result1')">Yes</button>
+  <button onclick="show('result2')">No</button>
+</div>
+
+<div id="result1" class="question hidden">
+  <p><strong>Initial BCx RECOMMENDED</strong><br>(2 peripheral sets; consider &gt;2 for endocarditis)</p>
+</div>
+
+<div id="result2" class="question hidden">
+  <p><strong>BCx NOT recommended</strong></p>
+</div>
+
+<script>
+  function show(id) {
+    const questions = document.querySelectorAll('.question');
+    questions.forEach(q => q.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
+</script>
+
+</body>
+</html>
